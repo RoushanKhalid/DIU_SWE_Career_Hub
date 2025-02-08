@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Job</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <h1>Edit Job</h1>
+    <form action="/edit_job/{{ job_id }}" method="POST">
+        <label for="job_title">Job Title:</label>
+        <input type="text" id="job_title" name="job_title" value="{{ job[0] }}" required><br>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required>{{ job[1] }}</textarea><br>
+        <label for="requirements">Requirements:</label>
+        <textarea id="requirements" name="requirements" required>{{ job[2] }}</textarea><br>
+        <label for="salary">Salary:</label>
+        <input type="number" id="salary" name="salary" value="{{ job[3] }}" required><br>
+        <button type="submit">Update Job</button>
+    </form>
+</body>
+
+</html>

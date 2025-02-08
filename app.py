@@ -1,0 +1,141 @@
+from flask import Flask, render_template, request, redirect, session, url_for
+import mysql.connector
+
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'
+
+# Database connection
+db = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="",
+    database="diu_swe_career_hub"
+)
+cursor = db.cursor()
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+@app.route('/about')
+def about():
+    return "About DIU SWE Career Hub!"
+
+@app.route('/form')
+def form():
+    job_id = request.args.get('job_id')
+    return render_template('form.html', job_id=job_id)
+
+@app.route('/submit', methods=['POST'])
+def submit():
+    name = request.form['name']
+    email = request.form['email']
+    job_id = request.form['job_id']
+    cursor.execute("INSERT INTO applications (job_id, name, email) VALUES (%s, %s, %s)", (job_id, name, email))
+    db.commit()
+    return f"Thank you, {name}! We will contact you at {email}."
+
+@app.route('/greet/<name>')
+def greet(name):
+    return f"Hello, {name}!"
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if username == 'admin' and password == 'admin':
+            session['username'] = username
+            return redirect('/admin')
+        return "Invalid credentials!"
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect('/')
+
+@app.route('/profile')
+def profile():
+    if 'username' in session:
+        return f"Welcome, {session['username']}!"
+    return "You are not logged in."
+
+@app.route('/redirect_home')
+def redirect_home():
+    return redirect(url_for('login'))
+
+submissions = []
+
+@app.route('/submissions')
+def show_submissions():
+    return str(submissions)
+
+@app.route('/add_job', methods=['GET', 'POST'])
+def add_job():
+    if request.method == 'POST':
+        job_title = request.form['job_title']
+        description = request.form['description']
+        requirements = request.form['requirements']
+        salary = request.form['salary']
+        cursor.execute("INSERT INTO jobs (job_title, description, requirements, salary) VALUES (%s, %s, %s, %s)", (job_title, description, requirements, salary))
+        db.commit()
+        return redirect('/admin')
+    return render_template('add_job.html')
+
+@app.route('/edit_job/<int:job_id>', methods=['GET', 'POST'])
+def edit_job(job_id):
+    if request.method == 'POST':
+        job_title = request.form['job_title']
+        description = request.form['description']
+        requirements = request.form['requirements']
+        salary = request.form['salary']
+        cursor.execute("UPDATE jobs SET job_title = %s, description = %s, requirements = %s, salary = %s WHERE job_id = %s", (job_title, description, requirements, salary, job_id))
+        db.commit()
+        return redirect('/admin')
+    cursor.execute("SELECT job_title, description, requirements, salary FROM jobs WHERE job_id = %s", (job_id,))
+    job = cursor.fetchone()
+    return render_template('edit_job.html', job=job, job_id=job_id)
+
+@app.route('/delete_job/<int:job_id>')
+def delete_job(job_id):
+    cursor.execute("DELETE FROM jobs WHERE job_id = %s", (job_id,))
+    db.commit()
+    return redirect('/admin')
+
+@app.route('/jobs')
+def jobs():
+    cursor.execute("SELECT job_id, job_title, description, requirements, salary FROM jobs")
+    jobs = cursor.fetchall()
+    return render_template('jobs.html', jobs=jobs)
+
+@app.route('/admin')
+def admin():
+    if 'username' in session:
+        cursor.execute("SELECT job_id, job_title, description, requirements, salary FROM jobs")
+        jobs = cursor.fetchall()
+        cursor.execute("SELECT applications.job_id, jobs.job_title, applications.name, applications.email FROM applications JOIN jobs ON applications.job_id = jobs.job_id")
+        applications = cursor.fetchall()
+        return render_template('admin.html', jobs=jobs, applications=applications)
+    return redirect('/login')
+
+@app.route('/chatbot')
+def chatbot():
+    return render_template('chatbot.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+@app.route('/careers')
+def careers():
+    cursor.execute("SELECT job_id, job_title, description, requirements, salary FROM jobs")
+    jobs = cursor.fetchall()
+    return render_template('careers.html', jobs=jobs)
+
+@app.route('/apply/<int:job_id>')
+def apply(job_id):
+    return render_template('form.html', job_id=job_id)
+
+if __name__ == '__main__':
+    app.run(debug=True)

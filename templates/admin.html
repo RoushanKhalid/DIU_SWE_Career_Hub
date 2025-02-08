@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <h1>Admin Panel</h1>
+    <a href="/add_job">Add Job</a>
+    <a href="/logout">Logout</a>
+    <h2>Job Listings</h2>
+    <table>
+        <tr>
+            <th>Job Title</th>
+            <th>Description</th>
+            <th>Requirements</th>
+            <th>Salary</th>
+            <th>Actions</th>
+        </tr>
+        {% for job in jobs %}
+        <tr>
+            <td>{{ job[1] }}</td>
+            <td>{{ job[2] }}</td>
+            <td>{{ job[3] }}</td>
+            <td>${{ job[4] }}</td>
+            <td>
+                <a href="/edit_job/{{ job[0] }}">Edit</a>
+                <a href="/delete_job/{{ job[0] }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <h2>Applications</h2>
+    <table>
+        <tr>
+            <th>Job Title</th>
+            <th>Name</th>
+            <th>Email</th>
+        </tr>
+        {% for application in applications %}
+        <tr>
+            <td>{{ application[1] }}</td>
+            <td>{{ application[2] }}</td>
+            <td>{{ application[3] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>

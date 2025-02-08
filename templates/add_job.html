@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add Job</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <h1>Add Job</h1>
+    <form action="/add_job" method="POST">
+        <label for="job_title">Job Title:</label>
+        <input type="text" id="job_title" name="job_title" required><br>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required></textarea><br>
+        <label for="requirements">Requirements:</label>
+        <textarea id="requirements" name="requirements" required></textarea><br>
+        <label for="salary">Salary:</label>
+        <input type="number" id="salary" name="salary" required><br>
+        <button type="submit">Add Job</button>
+    </form>
+</body>
+
+</html>

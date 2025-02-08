@@ -1,0 +1,29 @@
+<!-- templates/jobs.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Job Listings</title>
+</head>
+
+<body>
+    <h1>Job Listings</h1>
+    <table>
+        <tr>
+            <th>Job Title</th>
+            <th>Description</th>
+            <th>Requirements</th>
+            <th>Salary</th>
+        </tr>
+        {% for job in jobs %}
+        <tr>
+            <td>{{ job.job_title }}</td>
+            <td>{{ job.description }}</td>
+            <td>{{ job.requirements }}</td>
+            <td>${{ job.salary }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
