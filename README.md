@@ -23,7 +23,7 @@ It provides a **centralized job listing system** with an **AI-powered chatbot** 
 - **Backend:** Python (Flask)  
 - **Database:** MySQL  
 - **Frontend:** HTML/CSS  
-- **AI Chatbot:** OpenAI GPT-3.5 / Google Dialogflow  
+- **AI Chatbot:** OpenAI GPT-3.5 Turbo
 - **Deployment:** Streamlit  
 
 ---
