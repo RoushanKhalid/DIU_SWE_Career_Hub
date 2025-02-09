@@ -30,7 +30,7 @@ It provides a **centralized job listing system** with an **AI-powered chatbot** 
 
 ## 🤖 AI Chatbot Functionality  
 🔹 Provides **real-time answers** regarding job details, qualifications, and application procedures.  
-🔹 Integrated with **OpenAI GPT-3.5** or **Google Dialogflow** for automated responses.  
+🔹 Integrated with **OpenAI GPT-3.5 Turbo** for automated responses.  
 
 ---
 
