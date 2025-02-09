@@ -11,7 +11,7 @@ def form():
 @app.route('/submit', methods=['POST'])
 def submit():
     name = request.form['name']
-    email = request.form['email
+    email = request.form['email']
 ```
 
 ## License: unknown
