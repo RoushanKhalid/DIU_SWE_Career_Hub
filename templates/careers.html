@@ -7,25 +7,29 @@
 </head>
 
 <body>
-    <h1>Job Vacancies</h1>
-    <table>
-        <tr>
-            <th>Job Title</th>
-            <th>Description</th>
-            <th>Requirements</th>
-            <th>Salary</th>
-            <th>Actions</th>
-        </tr>
-        {% for job in jobs %}
-        <tr>
-            <td>{{ job[1] }}</td>
-            <td>{{ job[2] }}</td>
-            <td>{{ job[3] }}</td>
-            <td>BDT{{ job[4] }}</td>
-            <td><a href="/apply/{{ job[0] }}">Apply Now</a></td>
-        </tr>
-        {% endfor %}
-    </table>
+    <header>
+        <h1>Job Vacancies</h1>
+    </header>
+    <div class="container">
+        <table>
+            <tr>
+                <th>Job Title</th>
+                <th>Description</th>
+                <th>Requirements</th>
+                <th>Salary</th>
+                <th>Actions</th>
+            </tr>
+            {% for job in jobs %}
+            <tr>
+                <td>{{ job[1] }}</td>
+                <td>{{ job[2] }}</td>
+                <td>{{ job[3] }}</td>
+                <td>BDT {{ job[4] }}</td>
+                <td><a href="/apply/{{ job[0] }}" class="button">Apply Now</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 </body>
 
 </html>

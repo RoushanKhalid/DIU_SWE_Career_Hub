@@ -7,9 +7,13 @@
 </head>
 
 <body>
-    <h1>Application Submitted</h1>
-    <p>Thank you, {{ name }}! We will contact you at {{ email }}</p>
-    <a href="{{ url_for('home') }}">Back to Homepage</a>
+    <header>
+        <h1>Application Submitted</h1>
+    </header>
+    <div class="container">
+        <p>Thank you, {{ name }}! We will contact you at {{ email }}.</p>
+        <a href="{{ url_for('home') }}" class="button">Back to Homepage</a>
+    </div>
 </body>
 
 </html>

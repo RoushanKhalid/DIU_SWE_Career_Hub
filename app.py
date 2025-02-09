@@ -110,10 +110,23 @@ def admin():
     if 'username' in session:
         cursor.execute("SELECT job_id, job_title, description, requirements, salary FROM jobs")
         jobs = cursor.fetchall()
-        cursor.execute("SELECT applications.job_id, jobs.job_title, applications.name, applications.email FROM applications JOIN jobs ON applications.job_id = jobs.job_id")
+        cursor.execute("SELECT applications.application_id, jobs.job_title, applications.name, applications.email, applications.star_rating FROM applications JOIN jobs ON applications.job_id = jobs.job_id")
         applications = cursor.fetchall()
         return render_template('admin.html', jobs=jobs, applications=applications)
     return redirect('/login')
+
+@app.route('/delete_application/<int:application_id>')
+def delete_application(application_id):
+    cursor.execute("DELETE FROM applications WHERE application_id = %s", (application_id,))
+    db.commit()
+    return redirect('/admin')
+
+@app.route('/star_application/<int:application_id>', methods=['POST'])
+def star_application(application_id):
+    star_rating = request.form['star_rating']
+    cursor.execute("UPDATE applications SET star_rating = %s WHERE application_id = %s", (star_rating, application_id))
+    db.commit()
+    return redirect('/admin')
 
 @app.route('/chatbot')
 def chatbot():

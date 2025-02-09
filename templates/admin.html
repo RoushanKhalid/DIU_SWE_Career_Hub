@@ -7,46 +7,69 @@
 </head>
 
 <body>
-    <h1>Admin Panel</h1>
-    <a href="/add_job">Add Job</a>
-    <a href="/logout">Logout</a>
-    <h2>Job Listings</h2>
-    <table>
-        <tr>
-            <th>Job Title</th>
-            <th>Description</th>
-            <th>Requirements</th>
-            <th>Salary</th>
-            <th>Actions</th>
-        </tr>
-        {% for job in jobs %}
-        <tr>
-            <td>{{ job[1] }}</td>
-            <td>{{ job[2] }}</td>
-            <td>{{ job[3] }}</td>
-            <td>${{ job[4] }}</td>
-            <td>
-                <a href="/edit_job/{{ job[0] }}">Edit</a>
-                <a href="/delete_job/{{ job[0] }}">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-    <h2>Applications</h2>
-    <table>
-        <tr>
-            <th>Job Title</th>
-            <th>Name</th>
-            <th>Email</th>
-        </tr>
-        {% for application in applications %}
-        <tr>
-            <td>{{ application[1] }}</td>
-            <td>{{ application[2] }}</td>
-            <td>{{ application[3] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+    <header>
+        <h1>Admin Panel</h1>
+    </header>
+    <div class="admin-buttons">
+        <a href="/add_job" class="button">Add Job</a>
+        <a href="/logout" class="button">Logout</a>
+    </div>
+    <div class="container">
+        <h2>Job Listings</h2>
+        <table>
+            <tr>
+                <th>Job Title</th>
+                <th>Description</th>
+                <th>Requirements</th>
+                <th>Salary</th>
+                <th>Actions</th>
+            </tr>
+            {% for job in jobs %}
+            <tr>
+                <td>{{ job[1] }}</td>
+                <td>{{ job[2] }}</td>
+                <td>{{ job[3] }}</td>
+                <td>BDT {{ job[4] }}</td>
+                <td>
+                    <a href="/edit_job/{{ job[0] }}" class="button">Edit</a>
+                    <a href="/delete_job/{{ job[0] }}" class="button">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <h2>Applications</h2>
+        <table>
+            <tr>
+                <th>Job Title</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Star Rating</th>
+                <th>Actions</th>
+            </tr>
+            {% for application in applications %}
+            <tr>
+                <td>{{ application[1] }}</td>
+                <td>{{ application[2] }}</td>
+                <td>{{ application[3] }}</td>
+                <td>
+                    <form action="/star_application/{{ application[0] }}" method="POST">
+                        <select name="star_rating" onchange="this.form.submit()">
+                            <option value="0" {% if application[4]==0 %}selected{% endif %}>0</option>
+                            <option value="1" {% if application[4]==1 %}selected{% endif %}>1</option>
+                            <option value="2" {% if application[4]==2 %}selected{% endif %}>2</option>
+                            <option value="3" {% if application[4]==3 %}selected{% endif %}>3</option>
+                            <option value="4" {% if application[4]==4 %}selected{% endif %}>4</option>
+                            <option value="5" {% if application[4]==5 %}selected{% endif %}>5</option>
+                        </select>
+                    </form>
+                </td>
+                <td>
+                    <a href="/delete_application/{{ application[0] }}" class="button">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 </body>
 
 </html>
