@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Application Submitted</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+    <h1>Application Submitted</h1>
+    <p>Thank you, {{ name }}! We will contact you at {{ email }}</p>
+    <a href="{{ url_for('home') }}">Back to Homepage</a>
+</body>
+
+</html>

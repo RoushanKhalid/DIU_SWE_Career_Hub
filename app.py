@@ -33,11 +33,7 @@ def submit():
     job_id = request.form['job_id']
     cursor.execute("INSERT INTO applications (job_id, name, email) VALUES (%s, %s, %s)", (job_id, name, email))
     db.commit()
-    return f"Thank you, {name}! We will contact you at {email}."
-
-@app.route('/greet/<name>')
-def greet(name):
-    return f"Hello, {name}!"
+    return render_template('submit_success.html', name=name, email=email)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
