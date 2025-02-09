@@ -1,5 +1,10 @@
-from flask import Flask, render_template, request, redirect, session, url_for
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 import mysql.connector
+import openai
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -12,6 +17,33 @@ db = mysql.connector.connect(
     database="diu_swe_career_hub"
 )
 cursor = db.cursor()
+
+# OpenAI API key
+openai.api_key = os.getenv("OPENAI_API_KEY")  # Get API key securely
+
+def chat_with_gpt(prompt):
+    try:
+        # Fetch relevant data from the database
+        cursor.execute("SELECT job_title, description, requirements, salary FROM jobs")
+        jobs = cursor.fetchall()
+        
+        # Create a context string with job information
+        job_info = "\n".join([f"Job Title: {job[0]}, Description: {job[1]}, Requirements: {job[2]}, Salary: {job[3]}" for job in jobs])
+        
+        # Add project information
+        project_info = "DIU SWE Career Hub is a platform to connect students with job opportunities. You can find job listings, apply for jobs, and get assistance from our chatbot."
+        
+        # Combine the context with the user prompt
+        context = f"{project_info}\n\nJob Listings:\n{job_info}\n\nUser: {prompt}"
+        
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[{"role": "system", "content": "You are a helpful assistant."}, {"role": "user", "content": context}]
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        print(f"Error in chat_with_gpt: {e}")
+        return "Sorry, I couldn't process your request at the moment."
 
 @app.route('/')
 def home():
@@ -128,8 +160,12 @@ def star_application(application_id):
     db.commit()
     return redirect('/admin')
 
-@app.route('/chatbot')
+@app.route('/chatbot', methods=['GET', 'POST'])
 def chatbot():
+    if request.method == 'POST':
+        user_message = request.json['message']
+        bot_response = chat_with_gpt(user_message)
+        return jsonify({'response': bot_response})
     return render_template('chatbot.html')
 
 @app.route('/contact')

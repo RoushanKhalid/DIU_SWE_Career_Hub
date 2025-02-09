@@ -4,12 +4,42 @@
 <head>
     <title>Chatbot Help</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function sendMessage() {
+            const userMessage = document.getElementById('userMessage').value;
+            fetch('/chatbot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message: userMessage })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const chatBox = document.getElementById('chatBox');
+                    chatBox.innerHTML += `<p><strong>You:</strong> ${userMessage}</p>`;
+                    chatBox.innerHTML += `<p><strong>Chatbot:</strong> ${data.response}</p>`;
+                    document.getElementById('userMessage').value = '';
+                });
+        }
+    </script>
 </head>
 
 <body>
-    <h1>Chatbot Help</h1>
-    <p>Get assistance from our AI-powered chatbot.</p>
-    <!-- Add chatbot integration here -->
+    <header>
+        <h1>Chatbot Help</h1>
+    </header>
+    <div class="container">
+        <div class="card">
+            <div id="chatBox"
+                style="height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+                <!-- Chat messages will appear here -->
+            </div>
+            <input type="text" id="userMessage" placeholder="Type your message here..."
+                style="width: 80%; padding: 10px;">
+            <button onclick="sendMessage()" style="padding: 10px;">Send</button>
+        </div>
+    </div>
 </body>
 
 </html>
