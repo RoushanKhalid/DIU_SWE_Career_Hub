@@ -127,3 +127,28 @@ button:hover,
     margin-bottom: 20px;
     text-align: center;
 }
+
+/* About page styles */
+.contributors {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.contributor {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    flex: 1 1 calc(33.333% - 20px);
+    box-sizing: border-box;
+}
+
+.contributor a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.contributor a:hover {
+    text-decoration: underline;
+}

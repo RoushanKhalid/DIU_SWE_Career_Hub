@@ -51,7 +51,15 @@ def home():
 
 @app.route('/about')
 def about():
-    return "About DIU SWE Career Hub!"
+    project_info = {
+        "description": "DIU SWE Career Hub is a platform to connect students with job opportunities. You can find job listings, apply for jobs, and get assistance from our chatbot.",
+        "contributors": [
+            {"name": "Sk. Roushan Khalid", "email": "skroushankhalid.17@gmail.com", "phone": "01760535087"},
+            {"name": "Morsaline Ahmed", "email": "morsaline12025@gmail.com", "phone": "01796237248"},
+            {"name": "Md. Shahrul Zakaria", "email": "zakaria35-1033@diu.edu.bd", "phone": "01705716310"}
+        ]
+    }
+    return render_template('about.html', project_info=project_info)
 
 @app.route('/form')
 def form():
