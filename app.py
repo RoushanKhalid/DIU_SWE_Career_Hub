@@ -80,10 +80,25 @@ def form():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    name = request.form['name']
-    email = request.form['email']
     job_id = request.form['job_id']
-    cursor.execute("INSERT INTO applications (job_id, name, email) VALUES (%s, %s, %s)", (job_id, name, email))
+    name = request.form['name']
+    address = request.form['address']
+    email = request.form['email']
+    contact = request.form['contact']
+    desired_salary = request.form['desired_salary']
+    employability_desire = request.form['employability_desire']
+    citizenship = request.form['citizenship']
+    religion = request.form['religion']
+    previous_teaching_experience = request.form['previous_teaching_experience']
+    university_cgpa = request.form['university_cgpa']
+    passing_year = request.form['passing_year']
+    ssc_year = request.form['ssc_year']
+    hsc_year = request.form['hsc_year']
+
+    cursor.execute("""
+        INSERT INTO applications (job_id, name, address, email, contact, desired_salary, employability_desire, citizenship, religion, previous_teaching_experience, university_cgpa, passing_year, ssc_year, hsc_year)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """, (job_id, name, address, email, contact, desired_salary, employability_desire, citizenship, religion, previous_teaching_experience, university_cgpa, passing_year, ssc_year, hsc_year))
     db.commit()
     return render_template('submit_success.html', name=name, email=email)
 
@@ -160,11 +175,26 @@ def jobs():
 @app.route('/admin')
 def admin():
     if 'username' in session:
-        cursor.execute("SELECT job_id, job_title, description, requirements, salary FROM jobs")
+        cursor.execute("SELECT job_id, job_title, description, requirements, salary, vacancy FROM jobs")
         jobs = cursor.fetchall()
-        cursor.execute("SELECT applications.application_id, jobs.job_title, applications.name, applications.email, applications.star_rating FROM applications JOIN jobs ON applications.job_id = jobs.job_id")
+
+        cursor.execute("""
+            SELECT applications.application_id, jobs.job_title, applications.name, applications.email, applications.address, applications.contact, applications.desired_salary, applications.employability_desire, applications.citizenship, applications.religion, applications.previous_teaching_experience, applications.university_cgpa, applications.passing_year, applications.ssc_year, applications.hsc_year
+            FROM applications
+            JOIN jobs ON applications.job_id = jobs.job_id
+            ORDER BY jobs.job_title
+        """)
         applications = cursor.fetchall()
-        return render_template('admin.html', jobs=jobs, applications=applications)
+
+        # Group applications by job title
+        grouped_applications = {}
+        for application in applications:
+            job_title = application[1]
+            if job_title not in grouped_applications:
+                grouped_applications[job_title] = []
+            grouped_applications[job_title].append(application)
+
+        return render_template('admin.html', jobs=jobs, grouped_applications=grouped_applications)
     return redirect('/login')
 
 @app.route('/delete_application/<int:application_id>')

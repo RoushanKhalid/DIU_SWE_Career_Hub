@@ -122,10 +122,27 @@ button:hover,
     background-color: #0056b3;
 }
 
+/* Delete button styles */
+.button-delete {
+    background-color: #FF0000;
+}
+
+.button-delete:hover {
+    background-color: #CC0000;
+}
+
 /* Admin buttons container */
 .admin-buttons {
     margin-bottom: 20px;
     text-align: center;
+}
+
+/* Button group styles */
+.button-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
 }
 
 /* About page styles */
