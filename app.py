@@ -10,12 +10,15 @@ app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
 # Database connection
-db = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="diu_swe_career_hub"
-)
+def get_db_connection():
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="diu_swe_career_hub"
+    )
+
+db = get_db_connection()
 cursor = db.cursor()
 
 # OpenAI API key
@@ -44,6 +47,15 @@ def chat_with_gpt(prompt):
     except Exception as e:
         print(f"Error in chat_with_gpt: {e}")
         return "Sorry, I couldn't process your request at the moment."
+
+@app.before_request
+def before_request():
+    global db, cursor
+    try:
+        db.ping(reconnect=True, attempts=3, delay=5)
+    except mysql.connector.Error:
+        db = get_db_connection()
+        cursor = db.cursor()
 
 @app.route('/')
 def home():
