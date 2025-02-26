@@ -65,10 +65,4 @@ This AI-assisted platform will make hiring **faster, smarter, and more efficient
 
 ---
 
-## 📄 Detailed Project Information
-
-For more detailed information about the project, please refer to the [Project Details Document](https://docs.google.com/document/d/1uzDzBzfOPy9Sh6ScTGU7MO1Q-OV26sR72BOyY54b39A/edit?usp=sharing).
-
----
-
 🚀 **Contributions & Feedback are welcome!**
